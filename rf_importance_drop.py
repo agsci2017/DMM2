@@ -23,14 +23,13 @@ import csv
 import sys
 import pandas as pd
 
-# Значимость признаков для Wine, на основе RandomForest
-
-#сделать функция для оценки значимости на основе RF
+# Значимость признаков для Wine dataset'а
 
 dt = pd.read_csv('white.csv',sep=';')
 
-#~ print(dt.head(3))
-
+# нас интересует последний столбец(Y) и все столбцы кроме последнего(X)
+# все они должны быть числовыми
+# если нет - привести к числам(напр. LabelEncoder)
 
 def importance(dt):
 	X = dt.iloc[:,:-1].values
@@ -269,60 +268,76 @@ def FFS(dt):
 			print("RF score: {}, \n\tfeatures:{}, \n\ttheir names:{}\n".format(maxscore, selected, col[selected]))
 	return selected
 
-#~ LR(dt)
+# Значимость на основе Logit. Выдает, почему-то 2D-массив :)
+# LR(dt)
 
-#~ FFS(dt)
+# Forward feature selection
+FFS(dt)
+
+# Recursive feature elimination
+RFE_importance(dt)
+
+# Random Forest importance
+importance(dt)
 
 
-#~ cols = RFECV_importance(dt)
-#~ print(cols)
-#~ dt=dt[cols]
+classify(dt)
 
-#~ RFE_importance(dt)
+# RFE with 10-fold Cross-Validation
+# 1. Leave only important features
+# 2. Classify again
+cols = RFECV_importance(dt)
+print(cols)
+dt=dt[cols]
 
-#~ importance(dt)
+classify(dt)
 
-#~ classify(dt)
+
+
 
 #~ dt=dt.drop(columns=['fixed acidity','sulphates'])
 
-#~ classify(dt)
+#~ 
 
 
 
 
-import matplotlib.pyplot as plt
-from sklearn.naive_bayes import GaussianNB
-from sklearn.datasets import load_digits as load_data
-import scikitplot as skplt
-
-
-X, y = load_data(return_X_y=True)
-nb = GaussianNB()
-
-
-X = dt.iloc[:,:-1].values
-Y = dt.iloc[:,-1].values
-Xtr, Xte, Ytr, Yte = train_test_split(X, Y, test_size=0.1, random_state=42)
-clf=None
-clf = LogisticRegression(penalty='l2',C=1.0, random_state=0, solver='lbfgs',max_iter=100, multi_class='auto')
-clf.fit(Xtr, Ytr)
-print("feature importances(LR): ", clf.coef_)
-
-
-probas = clf.predict_proba(X)
-Ypr = clf.predict(Xte)
-#~ skplt.metrics.plot_confusion_matrix(Yte, Ypr, normalize=True)
-skplt.metrics.plot_roc(y_true=Y, y_probas=probas, plot_macro=False)
-pca = PCA(random_state=1)
-pca.fit(X)
-skplt.decomposition.plot_pca_2d_projection(pca, X, Y)
-
-plt.show()
 
 
 
-sys.exit(0)
+
+# import matplotlib.pyplot as plt
+# from sklearn.naive_bayes import GaussianNB
+# from sklearn.datasets import load_digits as load_data
+# import scikitplot as skplt
+
+
+# X, y = load_data(return_X_y=True)
+# nb = GaussianNB()
+
+
+# X = dt.iloc[:,:-1].values
+# Y = dt.iloc[:,-1].values
+# Xtr, Xte, Ytr, Yte = train_test_split(X, Y, test_size=0.1, random_state=42)
+# clf=None
+# clf = LogisticRegression(penalty='l2',C=1.0, random_state=0, solver='lbfgs',max_iter=100, multi_class='auto')
+# clf.fit(Xtr, Ytr)
+# print("feature importances(LR): ", clf.coef_)
+
+
+# probas = clf.predict_proba(X)
+# Ypr = clf.predict(Xte)
+# #~ skplt.metrics.plot_confusion_matrix(Yte, Ypr, normalize=True)
+# skplt.metrics.plot_roc(y_true=Y, y_probas=probas, plot_macro=False)
+# pca = PCA(random_state=1)
+# pca.fit(X)
+# skplt.decomposition.plot_pca_2d_projection(pca, X, Y)
+
+# plt.show()
+
+
+
+# sys.exit(0)
 
 
 
