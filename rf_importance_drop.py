@@ -280,7 +280,7 @@ RFE_importance(dt)
 # Random Forest importance
 importance(dt)
 
-
+# Тест классификаторов
 classify(dt)
 
 # RFE with 10-fold Cross-Validation
