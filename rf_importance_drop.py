@@ -292,9 +292,8 @@ dt=dt[cols]
 
 classify(dt)
 
-
-
-
+# поудалять разные фичи на основе рассчитанной значимости
+# снова запустить classify
 #~ dt=dt.drop(columns=['fixed acidity','sulphates'])
 
 #~ 
@@ -356,60 +355,60 @@ classify(dt)
 
 
 
-clf = KNeighborsClassifier(3)
+# clf = KNeighborsClassifier(3)
 
 
 
 
-print("RF without low features: ", clf.score(Xte,Yte))
+# print("RF without low features: ", clf.score(Xte,Yte))
 
-dt = dt.drop(columns=['sulphates'])
-#~ dt = dt.drop(columns=['fixed acidity'])
-print(dt.head(3))
+# dt = dt.drop(columns=['sulphates'])
+# #~ dt = dt.drop(columns=['fixed acidity'])
+# print(dt.head(3))
 
-X = dt.iloc[:,:-1].values
-Y = dt.iloc[:,-1].values
+# X = dt.iloc[:,:-1].values
+# Y = dt.iloc[:,-1].values
 
-Xtr, Xte, Ytr, Yte = train_test_split(X, Y, test_size=0.1, random_state=42)
+# Xtr, Xte, Ytr, Yte = train_test_split(X, Y, test_size=0.1, random_state=42)
 
-#~ clf = RandomForestClassifier(n_estimators=50, random_state=0)
-clf = KNeighborsClassifier(3)
-clf = tree.DecisionTreeClassifier(max_depth=5)
+# #~ clf = RandomForestClassifier(n_estimators=50, random_state=0)
+# clf = KNeighborsClassifier(3)
+# clf = tree.DecisionTreeClassifier(max_depth=5)
 
-clf.fit(Xtr, Ytr)
+# clf.fit(Xtr, Ytr)
 
-print("RF w/o low features: ", clf.score(Xte,Yte))
-
-
-
-features = dt.columns
-importances = clf.feature_importances_
-indices = np.argsort(importances)[:-1]  # top 10 features
-
-plt.barh(range(len(indices)), importances[indices], color='b', align='center')
-plt.yticks(range(len(indices)), [features[i] for i in indices])
-
-plt.show()
+# print("RF w/o low features: ", clf.score(Xte,Yte))
 
 
-clf = ExtraTreesClassifier()
+
+# features = dt.columns
+# importances = clf.feature_importances_
+# indices = np.argsort(importances)[:-1]  # top 10 features
+
+# plt.barh(range(len(indices)), importances[indices], color='b', align='center')
+# plt.yticks(range(len(indices)), [features[i] for i in indices])
+
+# plt.show()
 
 
-print(dt.columns.values)
-print(clf.feature_importances_)
+# clf = ExtraTreesClassifier()
 
 
-clf.fit(Xtr, Ytr)
+# print(dt.columns.values)
+# print(clf.feature_importances_)
 
-print("RF w/o low features: ", clf.score(Xte,Yte))
+
+# clf.fit(Xtr, Ytr)
+
+# print("RF w/o low features: ", clf.score(Xte,Yte))
 
 
-plt.figure()
-plt.title("Feature importances")
-plt.bar(range(len(imp)), imp,
-       color="r", align="center")
-plt.xticks(range(len(col)), col, rotation='vertical')
-plt.show()
+# plt.figure()
+# plt.title("Feature importances")
+# plt.bar(range(len(imp)), imp,
+#        color="r", align="center")
+# plt.xticks(range(len(col)), col, rotation='vertical')
+# plt.show()
 
-print("RF: ", clf.score(Xte,Yte))
+# print("RF: ", clf.score(Xte,Yte))
 
